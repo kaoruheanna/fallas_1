@@ -14,6 +14,15 @@ var AcvSevero = require('./rules/adicionales/acv_severo');
 var ACO = require('./rules/adicionales/aco');
 var AntecedentesAcvDbt = require('./rules/adicionales/antecedentes_acv_dbt');
 
+//Relativos: solo se tienen en cuenta si está el elemento en el json
+var SintomasMenores = require('./rules/relativos/sintomas_menores');
+var Embarazo = require('./rules/relativos/embarazo');
+var GiUrinariaDias = require('./rules/relativos/gi_urinaria_dias');
+var IamMeses = require('./rules/relativos/iam_meses');
+var InicioPostictal = require('./rules/relativos/inicio_postictal');
+var CirugiaTraumaDias = require('./rules/relativos/cirugia_trauma_dias');
+
+
 
 
 evaluar('inputs/caso1.json');
@@ -35,7 +44,16 @@ function evaluar(filePath) {
 		AcvSevero,
 		ACO,
 		AntecedentesAcvDbt
-	]
+	];
+
+	var criteriosRelativos = [
+		SintomasMenores,
+		Embarazo,
+		GiUrinariaDias,
+		IamMeses,
+		InicioPostictal,
+		CirugiaTraumaDias
+	];
 
 	console.log("Evaluando ",obj.nombre);
 	
@@ -49,6 +67,12 @@ function evaluar(filePath) {
 		console.log("");
 		console.log("Criterios Adicionales");
 		for (var criterio of criteriosAdicionales) {
+			criterio.execute(obj);
+		}
+
+		console.log("");
+		console.log("Criterios Relativos");
+		for (var criterio of criteriosRelativos) {
 			criterio.execute(obj);
 		}
 	

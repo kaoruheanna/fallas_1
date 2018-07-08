@@ -6,5 +6,13 @@
 	"nihss": 5,
 	"aco": false,
 	"antecedente_acv": false,
-	"antecedente_dbt": false
+	"antecedente_dbt": false,
+	"sintomas_menores": false,
+	"cirugia_mayor_dias": 15,
+	"trauma_dias": 18,
+	"embarazo": false,
+	"hemorragia_gi_dias": 21,
+	"hemorragia_urinaria_dias": 26,
+	"iam_meses": 6,
+	"inicio_postictal": false
 }
