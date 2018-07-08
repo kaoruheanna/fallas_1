@@ -1,5 +1,7 @@
 {
 	"nombre": "John Doe",
 	"edad": 19,
-	"horas_incidente": 3.5
+	"horas_incidente": 3.5,
+	"acv_isquemico": true,
+	"nihss": 5
 }
