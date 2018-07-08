@@ -25,9 +25,6 @@ var IamMeses = require('./rules/relativos/iam_meses');
 var InicioPostictal = require('./rules/relativos/inicio_postictal');
 var CirugiaTraumaDias = require('./rules/relativos/cirugia_trauma_dias');
 
-
-
-
 evaluar('inputs/caso1.json');
 evaluar('inputs/caso2.json');
 evaluar('inputs/caso3.json');
