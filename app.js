@@ -29,7 +29,11 @@ var CirugiaTraumaDias = require('./rules/relativos/cirugia_trauma_dias');
 
 
 evaluar('inputs/caso1.json');
-// evaluar('inputs/caso2.json');
+evaluar('inputs/caso2.json');
+evaluar('inputs/caso3.json');
+evaluar('inputs/caso4.json');
+evaluar('inputs/caso5.json');
+evaluar('inputs/caso6.json');
 
 
 function evaluar(filePath) {
@@ -58,6 +62,7 @@ function evaluar(filePath) {
 		CirugiaTraumaDias
 	];
 
+	console.log("-------------------");
 	console.log("Evaluando ",obj.nombre);
 	
 	try {

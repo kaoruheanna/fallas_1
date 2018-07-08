@@ -1,0 +1,10 @@
+{
+	"nombre": "Paciente 3",
+	"edad": 19,
+	"horas_incidente": 6,
+	"acv_isquemico": true,
+	"nihss": 5,
+	"aco": false,
+	"antecedente_acv": false,
+	"antecedente_dbt": false
+}

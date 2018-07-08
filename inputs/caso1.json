@@ -1,5 +1,5 @@
 {
-	"nombre": "John Doe",
+	"nombre": "Paciente 1",
 	"edad": 19,
 	"horas_incidente": 3.5,
 	"acv_isquemico": true,

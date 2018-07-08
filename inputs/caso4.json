@@ -1,0 +1,8 @@
+{
+	"nombre": "Paciente 4",
+	"edad": 19,
+	"horas_incidente": 2,
+	"acv_isquemico": true,
+	"nihss": 5,
+	"lesion_sangrante": true
+}

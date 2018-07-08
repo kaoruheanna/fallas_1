@@ -1,5 +1,13 @@
 {
-	"nombre": "John Doe",
+	"nombre": "Paciente 2",
 	"edad": 19,
-	"horas_incidente": 5.5
+	"horas_incidente": 3.5,
+	"acv_isquemico": true,
+	"nihss": 5,
+	"aco": false,
+	"antecedente_acv": false,
+	"antecedente_dbt": false,
+	"sintomas_menores": false,
+	"cirugia_mayor_dias": 15,
+	"trauma_dias": 18
 }
