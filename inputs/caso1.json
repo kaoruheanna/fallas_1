@@ -14,5 +14,18 @@
 	"hemorragia_gi_dias": 21,
 	"hemorragia_urinaria_dias": 26,
 	"iam_meses": 6,
-	"inicio_postictal": false
+	"inicio_postictal": false,
+	"trauma_acv_meses": false,
+    "hsa": false,
+    "sangrado_intercraneal": false,
+    "lesion_sangrante": false,
+    "ciraugia_intracraneal_intraespinal": false,
+    "tas": false,
+    "tad": false,
+    "hemorragia_interna": false,
+    "puncion_arterial": false,
+    "heparina": false,
+    "aco_rin_tp": false,
+    "uso_inhibidores": false,
+    "tac_infarto": false
 }

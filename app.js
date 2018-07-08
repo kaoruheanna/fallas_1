@@ -8,6 +8,9 @@ var Edad = require('./rules/absolutos/edad');
 var AcvIsquemico = require('./rules/absolutos/acv_isquemico');
 var NihssAbsoluto = require('./rules/absolutos/nihss_absoluto');
 
+// Contraindicaciones Absolutas
+var ContraindicacionesAbsolutas = require('./rules/contraindicaciones_absolutas/contraindicaciones');
+
 // adicionales
 var EdadAdicional = require('./rules/adicionales/edad_adicional');
 var AcvSevero = require('./rules/adicionales/acv_severo');
@@ -63,6 +66,10 @@ function evaluar(filePath) {
 		for (var criterio of criteriosAbsolutos) {
 			criterio.execute(obj);
 		}
+
+		console.log("");
+		console.log("Contraindicaciones Absolutas");
+		ContraindicacionesAbsolutas.execute(obj);
 
 		console.log("");
 		console.log("Criterios Adicionales");
