@@ -3,5 +3,8 @@
 	"edad": 19,
 	"horas_incidente": 3.5,
 	"acv_isquemico": true,
-	"nihss": 5
+	"nihss": 5,
+	"aco": false,
+	"antecedente_acv": false,
+	"antecedente_dbt": false
 }

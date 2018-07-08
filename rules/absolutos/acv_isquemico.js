@@ -1,6 +1,6 @@
 "use strict"
 
-var ExcluirException = require('./excluir_exception');
+var ExcluirException = require('../excluir_exception');
 
 class AcvIsquemico {
     constructor(){
