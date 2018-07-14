@@ -23,7 +23,7 @@ router.get('/decision', function(req, res) {
 
 var rules = [
 	{
-		// Rule #
+		// Rule #1
 		"condition": function(R) {
 	        R.when(this.contraindicacion == 1);
 	    },
@@ -32,7 +32,7 @@ var rules = [
 	        R.stop();
 	    }
 	} , {
-		// Rule #
+		// Rule #2
 		"condition": function(R) {
 	        R.when(this.horas_incidente > 3 && this.aco == 1);
 	    },
@@ -41,7 +41,7 @@ var rules = [
 	        R.stop();
 	    }
 	} , {
-		// Rule #
+		// Rule #3
 		"condition": function(R) {
 	        R.when(this.horas_incidente > 3 && this.nihss > 25);
 	    },
@@ -50,7 +50,7 @@ var rules = [
 	        R.stop();
 	    }
 	} , {
-		// Rule #
+		// Rule #4
 		"condition": function(R) {
 	        R.when(this.horas_incidente > 3 && this.antecedente_dbt == 1);
 	    },
@@ -59,7 +59,7 @@ var rules = [
 	        R.stop();
 	    }
 	} , {
-		// Rule #
+		// Rule #5
 		"condition": function(R) {
 	        R.when(this.horas_incidente > 3 && this.edad > 80);
 	    },
@@ -68,7 +68,7 @@ var rules = [
 	        R.stop();
 	    }
 	} , {
-		// Rule #
+		// Rule #6
 		"condition": function(R) {
 	        R.when(this.acv_isquemico == 0);
 	    },
@@ -77,7 +77,7 @@ var rules = [
 	        R.stop();
 	    }
 	} ,	{
-		// Rule #
+		// Rule #7
 		"condition": function(R){
 			R.when(this.edad < 18);
 		},
@@ -86,7 +86,7 @@ var rules = [
 			R.stop();
 		}
 	} , {
-		// Rule #
+		// Rule #8
 		"condition": function(R) {
 	        R.when(this.horas_incidente > 4.5);
 	    },
@@ -95,7 +95,7 @@ var rules = [
 	        R.stop();
 	    }
 	} , {
-		// Rule #
+		// Rule #9
 		"condition": function(R) {
 	        R.when(this.nihss < 4);
 	    },
