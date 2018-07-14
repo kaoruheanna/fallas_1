@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TP Fallas</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="http://requirejs.org/docs/release/2.2.0/minified/require.js"></script>
+	<script src="motor_inferencia.js"></script>
+</head>
+
+
+<div class="jumbotron text-center">
+	<h1>Sistema Experto</h1>
+	<h3>Administración de trombolítico para el tratamiento del ACV isquémico</h3>
+	<p>Motor de Inferencia</p>
+	<br>
+	<h3 >Desarrolladores</h3>
+	<h5 >Heanna, Kaoru</h5>
+	<h5 >Menniti, Sebastian Ezequiel</h5>
+
+</div>
+  
+<div class="container">
+	<div class="text-center">
+		<h1>Informacion obligatoria del paciente</h1>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<h3>Edad</h3>
+			<input type="number" name="edad" value="0">
+		</div>
+		<div class="col-sm-4">
+			<h3>Horas desde el incidente</h3>
+			<input type="number" name="horas-incidente" value="5"><br>
+		</div>
+		<div class="col-sm-4">
+			<h3>ACV isquemico</h3>
+			<input type="radio" name="acv-isquemico" value="1" checked> Si <br>
+			<input type="radio" name="acv-isquemico" value="0"> No <br>
+			</select>
+		</div>
+		<div class="col-sm-4">
+			<h3>Valor en escala NIHSS</h3>
+			<input type="number" name="nihss" value="0">
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="text-center">
+		<h1>Criterios adicionales</h1>
+	</div>
+	<div class="row">
+		<div class="col-sm-4">
+			<input type="checkbox" name="antecedente-dbt"> Posee antecedentes diabéticos<br>
+			<input type="checkbox" name="aco"> Consume ACO<br>
+		</div>
+	</div>
+</div>
+
+<div class="container" name="contraindicaciones">
+	<div class="text-center">
+		<h1>Contraindicaciones</h1>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<input type="checkbox" name="trauma-acv-meses"> Trauma o ACV en los 3 meses previos<br>
+			<input type="checkbox" name="hsa"> Síntomas sugestivos de HSA<br>
+			<input type="checkbox" name="sangrado-intercraneal"> Historia de Sangrado Intracraneal<br>
+			<input type="checkbox" name="lesion-sangrante"> Tumor cerebral, MAV, aneurisma (lesión potencialmente sangrante)<br>
+			<input type="checkbox" name="ciraugia-intracraneal-intraespinal"> Cirugía intracraneal o intraespinal reciente<br>
+			<input type="checkbox" name="hemorragia-interna"> Hemorragia interna activa<br>
+			<input type="checkbox" name="uso-inhibidores"> Uso de inhibidores directos del factor Xa (NOACS), con test de  laboratorio alterados (KPTT, RIN, plaquetas, Test de actividad del factor Xa, Tiempo de Ecarina)<br>
+		</div>
+		<div class="col-sm-6">
+			<input type="checkbox" name="tas"> TAS > 185<br>
+			<input type="checkbox" name="tad"> TAD > 110 mmHg<br>
+			<input type="checkbox" name="aco-rin-tp"> ACO con RIN> 1,7 o TP >15 seg<br>
+			<input type="checkbox" name="puncion-arterial"> Punción arterial en sitios no compresible en los 7 días previos<br>
+			<input type="checkbox" name="heparina"> Heparina en las 48 hs previas con KPTT elevado por encima del límite superior<br>
+			<input type="checkbox" name="tac-infarto"> TAC con evidencia de infarto multilobar (hipodensidad>1/3 del hemisferio cerebral)<br>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<h3 class="text-center">Decisión</h3>        
+	<div class="">
+		<p>La decisión que debería tomarse es..</p>
+		<h2 id="decision" style="text-align: center"></p>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function refreshDecision() {
+		var edad = $("input[name=edad]").val();
+		var horas_incidente = $("input[name=horas-incidente]").val();
+		var acv_isquemico = $("input[name=acv-isquemico]:checked").val();
+		var nihss = $("input[name=nihss]").val();
+		var aco = ($("input[name=aco]:checked").val() == 'on')? 1:0;
+		var antecedente_dbt = ($("input[name=antecedente-dbt]:checked").val() == 'on')? 1:0;
+		var contraindicacion = (
+				($("input[name=trauma-acv-meses]:checked").val() == 'on') ||
+				($("input[name=hsa]:checked").val() == 'on') ||
+				($("input[name=sangrado-intercraneal]:checked").val() == 'on') ||
+				($("input[name=lesion-sangrante]:checked").val() == 'on') ||
+				($("input[name=ciraugia-intracraneal-intraespinal]:checked").val() == 'on') ||
+				($("input[name=hemorragia-interna]:checked").val() == 'on') ||
+				($("input[name=uso-inhibidores]:checked").val() == 'on') ||
+				($("input[name=tas]:checked").val() == 'on') ||
+				($("input[name=tad]:checked").val() == 'on') ||
+				($("input[name=aco-rin-tp]:checked").val() == 'on') ||
+				($("input[name=puncion-arterial]:checked").val() == 'on') ||
+				($("input[name=heparina]:checked").val() == 'on') ||
+				($("input[name=tac-infarto]:checked").val() == 'on')
+			) ? 1:0;
+
+		$.get('http://127.0.0.1:8080/motor_inferencia/decision', { acv_isquemico: acv_isquemico, edad: edad, horas_incidente: horas_incidente, nihss: nihss, aco: aco, antecedente_dbt: antecedente_dbt, contraindicacion: contraindicacion }, 
+			function(response) {
+				switch(parseInt(response)) {
+					case 3:
+						$("h2#decision").text("Paciente descartado del tratamiento.");
+						$("h2#decision").css("background-color","#FF0000");
+						break;
+					default:
+						$("h2#decision").text("Administrar trombolitico al paciente");
+						$("h2#decision").css("background-color","#00FF00");
+						break;
+				}
+			});
+	};
+
+	$("input[name=edad]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=horas-incidente]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=acv-isquemico]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=nihss]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=aco]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=antecedente-dbt]").change(function() {
+		refreshDecision();
+	});
+
+	$("container[name=contraindicaciones]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=trauma-acv-meses]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=hsa]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=sangrado-intercraneal]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=lesion-sangrante]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=ciraugia-intracraneal-intraespinal]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=hemorragia-interna]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=uso-inhibidores]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=tas]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=tad]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=aco-rin-tp]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=puncion-arterial]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=heparina]").change(function() {
+		refreshDecision();
+	});
+
+	$("input[name=tac-infarto]").change(function() {
+		refreshDecision();
+	});
+
+	refreshDecision();
+</script>
+
+</body>
+</html>
