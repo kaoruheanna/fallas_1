@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 'use strict';
-var RuleEngine = require('node-rules/lib/node-rules');
 
 router.get('/decision', function(req, res) {
 	console.log(req.query);
@@ -21,95 +20,55 @@ router.get('/decision', function(req, res) {
 	inference_engine(acv_isquemico, edad, horas_incidente, nihss, aco, antecedente_dbt, contraindicacion, res);
 });
 
-var rules = [
-	{
-		// Rule #1
-		"condition": function(R) {
-	        R.when(this.contraindicacion == 1);
-	    },
-	    "consequence": function(R) {
-	        this.result = '3';
-	        R.stop();
-	    }
-	} , {
-		// Rule #2
-		"condition": function(R) {
-	        R.when(this.horas_incidente > 3 && this.aco == 1);
-	    },
-	    "consequence": function(R) {
-	        this.result = '3';
-	        R.stop();
-	    }
-	} , {
-		// Rule #3
-		"condition": function(R) {
-	        R.when(this.horas_incidente > 3 && this.nihss > 25);
-	    },
-	    "consequence": function(R) {
-	        this.result = '3';
-	        R.stop();
-	    }
-	} , {
-		// Rule #4
-		"condition": function(R) {
-	        R.when(this.horas_incidente > 3 && this.antecedente_dbt == 1);
-	    },
-	    "consequence": function(R) {
-	        this.result = '3';
-	        R.stop();
-	    }
-	} , {
-		// Rule #5
-		"condition": function(R) {
-	        R.when(this.horas_incidente > 3 && this.edad > 80);
-	    },
-	    "consequence": function(R) {
-	        this.result = '3';
-	        R.stop();
-	    }
-	} , {
-		// Rule #6
-		"condition": function(R) {
-	        R.when(this.acv_isquemico == 0);
-	    },
-	    "consequence": function(R) {
-	        this.result = '3';
-	        R.stop();
-	    }
-	} ,	{
-		// Rule #7
-		"condition": function(R){
-			R.when(this.edad < 18);
-		},
-		"consequence": function(R){
-			this.result = '3';
-			R.stop();
-		}
-	} , {
-		// Rule #8
-		"condition": function(R) {
-	        R.when(this.horas_incidente > 4.5);
-	    },
-	    "consequence": function(R) {
-	        this.result = '3';
-	        R.stop();
-	    }
-	} , {
-		// Rule #9
-		"condition": function(R) {
-	        R.when(this.nihss < 4);
-	    },
-	    "consequence": function(R) {
-	        this.result = '3';
-	        R.stop();
-	    }
-	}
+var ExcluirException = require('./rules/excluir_exception');
+
+// absolutos
+var TiempoAguja = require('./rules/absolutos/tiempo_aguja');
+var Edad = require('./rules/absolutos/edad');
+var AcvIsquemico = require('./rules/absolutos/acv_isquemico');
+var NihssAbsoluto = require('./rules/absolutos/nihss_absoluto');
+
+// Contraindicaciones Absolutas
+var ContraindicacionesAbsolutas = require('./rules/contraindicaciones_absolutas/contraindicaciones');
+
+// adicionales
+var EdadAdicional = require('./rules/adicionales/edad_adicional');
+var AcvSevero = require('./rules/adicionales/acv_severo');
+var ACO = require('./rules/adicionales/aco');
+var AntecedentesAcvDbt = require('./rules/adicionales/antecedentes_acv_dbt');
+
+//Relativos: solo se tienen en cuenta si está el elemento en el json
+var SintomasMenores = require('./rules/relativos/sintomas_menores');
+var Embarazo = require('./rules/relativos/embarazo');
+var GiUrinariaDias = require('./rules/relativos/gi_urinaria_dias');
+var IamMeses = require('./rules/relativos/iam_meses');
+var InicioPostictal = require('./rules/relativos/inicio_postictal');
+var CirugiaTraumaDias = require('./rules/relativos/cirugia_trauma_dias');
+
+var criteriosAbsolutos = [
+		TiempoAguja,
+		Edad,
+		AcvIsquemico,
+		NihssAbsoluto
+	];
+
+var criteriosAdicionales = [
+	EdadAdicional,
+	AcvSevero,
+	ACO,
+	AntecedentesAcvDbt
+];
+
+var criteriosRelativos = [
+	SintomasMenores,
+	Embarazo,
+	GiUrinariaDias,
+	IamMeses,
+	InicioPostictal,
+	CirugiaTraumaDias
 ];
 
 function inference_engine(acv_isquemico, edad, horas_incidente, nihss, aco, antecedente_dbt, contraindicacion, res) {
-	var R = new RuleEngine();
-	R.register(rules);
-
 	var fact = {
 	    "acv_isquemico": acv_isquemico,
 	    "edad": edad,
@@ -120,9 +79,22 @@ function inference_engine(acv_isquemico, edad, horas_incidente, nihss, aco, ante
 	    "contraindicacion": contraindicacion
 	};
 
-	R.execute(fact, function(data) {
-		res.send(data.result);
-	});
+	var rules = criteriosAbsolutos.concat([ContraindicacionesAbsolutas], criteriosAdicionales, criteriosRelativos);
+
+	try {
+		for (var rule of rules){
+			rule.execute(fact);
+		}
+		console.log("administrar tromobolitico");
+		res.send("1");
+	} catch (e) {
+	  	if (e instanceof ExcluirException) {
+	    	console.log("Excluir paciente del tratamiento");
+	    	res.send("3");
+	  	} else {
+	    	console.log("error:" + e.name + ': ' + e.message);
+	  	}
+	}
 }
 
 module.exports = router;
